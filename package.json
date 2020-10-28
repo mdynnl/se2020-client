@@ -2,6 +2,8 @@
   "name": "se2020-client",
   "version": "0.1.0",
   "private": true,
+  "repository": "https://github.com/mdynnl/se2020-client",
+  "author": "Nyi Nyi Lwin <53917354+mdynnl@users.noreply.github.com>",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
