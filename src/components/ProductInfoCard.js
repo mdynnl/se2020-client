@@ -17,7 +17,6 @@ const ProductInfoCard = ({ product }) => {
 				<img
 					height="150px"
 					width="150px"
-					placeholder={true}
 					style={{
 						marginBottom: '24px',
 						objectFit: 'cover',
