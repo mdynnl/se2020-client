@@ -1,4 +1,6 @@
 import React from 'react';
+import { Component, useState, useEffect } from 'react';
+import axios from 'axios';
 import './Components.css';
 import 'antd/dist/antd.css';
 import {
@@ -16,6 +18,15 @@ import {
 
 const InputForm = () => {
 	const Option = { Select };
+
+	const [warehouses, setWarehouses] = useState([]);
+
+	useEffect(() => {
+		axios.get('/foreign/warehouses').then((response) => {
+			//console.log(response);
+			setWarehouses(response.data);
+		});
+	});
 
 	const warehouseList = [
 		{ id: 1, name: 'Warehouse 1' },
@@ -76,13 +87,21 @@ const InputForm = () => {
 									);
 								}}
 							>
-								{warehouseList.map((warehouse) => {
+								{warehouses.map((warehouse) => {
 									return <Option value={warehouse.id}>{warehouse.name}</Option>;
 								})}
 							</Select>
 						</Form.Item>
 						<Form.Item label="Description">
-							<Input.TextArea placeholder="Item Brief Description" />
+							<Input.TextArea
+								autoSize={{
+									minRows: 2,
+									maxRows: 4,
+								}}
+								maxLength={50}
+								showCount={true}
+								placeholder="Item Brief Description"
+							/>
 						</Form.Item>
 						<Form.Item>
 							<Button type="primary">Save</Button>

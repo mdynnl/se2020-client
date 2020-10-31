@@ -5,14 +5,6 @@ import { Image, Card, Descriptions, Button } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 
 const ProductInfoCard = ({ product }) => {
-	// const item = {
-	// 	name: 'Product 1',
-	// 	price: 20000,
-	// 	stockBalance: 100,
-	// 	warehouse: 'Mandalay Branch',
-	// 	description: 'This product is for blah blah',
-	// };
-
 	return (
 		<div style={{ paddingTop: '86px' }}>
 			<Card
@@ -22,7 +14,7 @@ const ProductInfoCard = ({ product }) => {
 					margin: '24px',
 				}}
 			>
-				<Image
+				<img
 					height="150px"
 					width="150px"
 					placeholder={true}
@@ -30,7 +22,7 @@ const ProductInfoCard = ({ product }) => {
 						marginBottom: '24px',
 						objectFit: 'cover',
 					}}
-					alt="ProductItem"
+					alt="Product Item"
 					src={product.imgUrl}
 				/>
 				<Card.Meta
