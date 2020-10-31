@@ -82,16 +82,16 @@ const ProductTable = () => {
 
   const [apiProducts, setApiProducts] = useState([])
 
-  useEffect(() => {
-    axios
-      .get('/api/v1/products')
-      .then(response => {
-        setApiProducts(response.data)
-      })
-      .catch(() => {
-        console.log('failed to fetch products')
-      })
-  }, []) // <= just copied your code
+  // useEffect(() => {
+  //   axios
+  //     .get('/api/v1/products')
+  //     .then(response => {
+  //       setApiProducts(response.data)
+  //     })
+  //     .catch(() => {
+  //       console.log('failed to fetch products')
+  //     })
+  // }, []) // <= just copied your code
 
   const onRowClick = record => ({
     onClick: () => {
@@ -107,7 +107,7 @@ const ProductTable = () => {
         <ProductActions />
         <Table
           columns={columns}
-          dataSource={apiProducts}
+          dataSource={items}
           rowKey={item => item.id}
           scroll={{ x: 240 }}
           onRow={onRowClick}

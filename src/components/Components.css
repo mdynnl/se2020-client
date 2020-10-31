@@ -1,18 +1,20 @@
 .ProductTable {
-	height: 100%;
-	flex: auto;
-	padding: 24px;
+  height: 100%;
+  flex: auto;
+  padding: 24px;
 }
 
 .InputForm {
-	width: 40%;
-	align-content: center;
-	padding: 20px;
+  width: 480px;
+  border: black 1em;
+  margin: 0 auto;
+  align-content: center;
+  padding: 20px;
 }
 
 .ProductDetail {
-	width: 400px;
-	background: #acacac33;
-	margin: 24px;
-	padding: 8px;
+  width: 400px;
+  background: #acacac33;
+  margin: 24px;
+  padding: 8px;
 }

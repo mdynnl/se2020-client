@@ -12,8 +12,11 @@ import {
   Input,
   InputNumber,
   Button,
-  Select
+  Select,
+  Space,
+  Upload
 } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 
 const InputForm = () => {
@@ -41,16 +44,19 @@ const InputForm = () => {
       <Form layout="vertical">
         <Row>
           <Col>
-            <Card
-              hoverable={true}
-              style={{ marginRight: 24, marginTop: 8, width: 200 }}
-              size="small"
+            <Upload
+              name="picture"
+              listType="picture-card"
+              style={{
+                width: '200px',
+                height: '200px'
+              }}
             >
-              <Image
-                alt="ProductItem"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            </Card>
+              <div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </div>
+            </Upload>
           </Col>
           <Col flex={1} style={{ padding: 8 }}>
             <Form.Item label="Product Name">
@@ -97,12 +103,12 @@ const InputForm = () => {
               />
             </Form.Item>
             <Form.Item>
-              <Button type="primary">Save</Button>
-              <Link to="/">
-                <Button style={{ marginLeft: 8 }} type="secondary">
-                  Cancel
-                </Button>
-              </Link>
+              <Space>
+                <Button type="primary">Save</Button>
+                <Link to="/">
+                  <Button type="secondary">Cancel</Button>
+                </Link>
+              </Space>
             </Form.Item>
           </Col>
         </Row>
