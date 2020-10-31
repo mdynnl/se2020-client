@@ -1,7 +1,7 @@
 import { React } from 'react';
 import './Components.css';
 import 'antd/dist/antd.css';
-import { Image, Card, Descriptions, Button } from 'antd';
+import { Card, Descriptions, Button } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 
 const ProductInfoCard = ({ product }) => {

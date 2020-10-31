@@ -1,3 +1,5 @@
 import ProductTable from '../components/ProductTable'
 
-export default () => <ProductTable />
+const MainPage = () => <ProductTable />
+
+export default MainPage

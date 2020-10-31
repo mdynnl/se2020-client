@@ -7,7 +7,7 @@ const onSearch = productName => {
   console.log(productName)
 }
 
-export default () => (
+const ProductActions = () => (
   <Row justify="end space-between">
     <Space
       style={{
@@ -28,3 +28,5 @@ export default () => (
     </Space>
   </Row>
 )
+
+export default ProductActions

@@ -1,3 +1,5 @@
 import InputForm from '../components/InputForm'
 
-export default () => <InputForm />
+const AddNewItem = () => <InputForm />
+
+export default AddNewItem
