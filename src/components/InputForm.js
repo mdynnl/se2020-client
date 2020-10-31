@@ -17,14 +17,17 @@ import {
 import { Link } from 'react-router-dom'
 
 const InputForm = () => {
-  const Option = { Select }
-
   const [warehouses, setWarehouses] = useState([])
 
   useEffect(() => {
-    axios.get('/api/foreign/warehouses').then(response => {
-      setWarehouses(response.data)
-    })
+    axios
+      .get('/api/foreign/warehouses')
+      .then(response => {
+        setWarehouses(response.data)
+      })
+      .catch(() => {
+        console.log('failed to fetch warehouses')
+      })
   }, []) // <= don'f forget the dependency array
 
   return (
@@ -71,21 +74,15 @@ const InputForm = () => {
               <Select
                 placeholder="Select a warehouse"
                 showSearch
-                filterOption={(input, option) => {
-                  return (
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  )
-                }}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().includes(input.toLowerCase())
+                }
               >
-                {warehouses.map(warehouse => {
-                  return (
-                    <Option key={warehouse.id} value={warehouse.id}>
-                      {warehouse.name}
-                    </Option>
-                  )
-                })}
+                {warehouses.map(({ id, name }) => (
+                  <Select.Option key={id} value={id}>
+                    {name}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
             <Form.Item label="Description">
