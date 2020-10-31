@@ -98,16 +98,16 @@ const ProductTable = () => {
 	return (
 		<Row>
 			<div className="ProductTable">
-				<Typography.Title level={'h3'}>Product Items</Typography.Title>
+				<Typography.Title level={3}>Product Items</Typography.Title>
 				<Row justify="end space-between">
 					<Space
 						style={{
 							marginBottom: '16px',
 						}}
 					>
-						<Link to="/add-new">
+						{/* <Link to="/add-new"> */}
 							<Button  type="primary" icon={<PlusOutlined />}>Add New</Button>
-						</Link>
+						{/* </Link> */}
 						<Search
 							style={{
 								width: '200px',
@@ -121,7 +121,8 @@ const ProductTable = () => {
 				</Row>
 				<Table
 					columns={columns}
-					dataSource={items}
+          dataSource={items}
+          rowKey={item => item.id}
 					scroll={{ x: 240 }}
 					onRow={onRowClick}
 				/>

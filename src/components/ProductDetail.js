@@ -14,7 +14,7 @@ const ProductDetail = () => {
 
 	return (
 		<div className="ProductDetail">
-			<Typography.Title level={5} style={{ color: '#343434' }}>
+			<Typography.Title level={4} style={{ color: '#343434' }}>
 				Product Info
 			</Typography.Title>
 			<Image

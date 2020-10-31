@@ -80,7 +80,7 @@ const InputForm = () => {
 								}}
 							>
 								{warehouses.map((warehouse) => {
-									return <Option value={warehouse.id}>{warehouse.name}</Option>;
+									return <Option key={warehouse.id} value={warehouse.id}>{warehouse.name}</Option>;
 								})}
 							</Select>
 						</Form.Item>
