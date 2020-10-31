@@ -22,18 +22,10 @@ const InputForm = () => {
 	const [warehouses, setWarehouses] = useState([]);
 
 	useEffect(() => {
-		axios.get('/foreign/warehouses').then((response) => {
-			//console.log(response);
+		axios.get('/api/foreign/warehouses').then((response) => {
 			setWarehouses(response.data);
 		});
-	});
-
-	const warehouseList = [
-		{ id: 1, name: 'Warehouse 1' },
-		{ id: 2, name: 'Warehouse 2' },
-		{ id: 3, name: 'Yangon Branch' },
-		{ id: 4, name: 'Mandalay Branch' },
-	];
+	}, []); // <= don'f forget the dependency array
 
 	return (
 		<div className="InputForm">

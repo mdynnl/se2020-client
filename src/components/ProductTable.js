@@ -4,6 +4,7 @@ import { Table, Typography, Input, Row, Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import './Components.css';
 import ProductInfoCard from './ProductInfoCard';
+import { Link } from 'react-router-dom';
 
 const { Search } = Input;
 
@@ -104,9 +105,9 @@ const ProductTable = () => {
 							marginBottom: '16px',
 						}}
 					>
-						<Button type="primary" icon={<PlusOutlined />}>
-							Add New
-						</Button>
+						<Link to="/add-new">
+							<Button  type="primary" icon={<PlusOutlined />}>Add New</Button>
+						</Link>
 						<Search
 							style={{
 								width: '200px',
