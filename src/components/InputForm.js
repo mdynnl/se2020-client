@@ -2,24 +2,33 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import './Components.css'
 import 'antd/dist/antd.css'
+import SuccessModal from './Modals'
+
 import {
   Typography,
   Form,
   Row,
   Col,
-  Card,
-  Image,
   Input,
   InputNumber,
   Button,
   Select,
   Space,
-  Upload
+  Upload,
+  Modal
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 
-const InputForm = () => {
+// todo: Implement Input Validation
+
+const InputForm = ({ product }) => {
+  let initialValues
+  if (product !== undefined) {
+    initialValues = {
+      name: product.name
+    }
+  }
   const [warehouses, setWarehouses] = useState([])
 
   useEffect(() => {
@@ -33,6 +42,41 @@ const InputForm = () => {
       })
   }, []) // <= don'f forget the dependency array
 
+  const [form] = Form.useForm()
+  const [loading, setLoading] = useState(false)
+  const onFinish = values => {
+    setLoading(true)
+    axios
+      .post('/api/v1/products', {
+        name: values.name,
+        price: values.price,
+        stockBalance: values.stockBalance,
+        warehouseId: 3,
+        description: values.description,
+        picture: 'http://placeimg.com/500/500/business'
+      })
+      .then(response => {
+        setLoading(false)
+        form.resetFields()
+        showSuccessModal('Item Added')
+        console.log(response)
+      })
+      .catch(error => {
+        setLoading(false)
+        showErrorModal(error)
+        console.log(error)
+      })
+    // console.log(values)
+  }
+
+  const showSuccessModal = message => {
+    Modal.success({ title: 'Item Added', content: 'Item added successfully' })
+  }
+
+  const showErrorModal = ({ message }) => {
+    Modal.error({ title: 'Failed', content: 'Failed to add item : ' + message })
+  }
+
   return (
     <div className="InputForm">
       <Typography.Title
@@ -41,12 +85,19 @@ const InputForm = () => {
       >
         Add A New Product Item
       </Typography.Title>
-      <Form layout="vertical">
+      <Form
+        form={form}
+        name="product"
+        layout="vertical"
+        onFinish={onFinish}
+        initialValues={initialValues}
+      >
         <Row>
           <Col>
             <Upload
               name="picture"
               listType="picture-card"
+              showUploadList={false}
               style={{
                 width: '200px',
                 height: '200px'
@@ -59,24 +110,24 @@ const InputForm = () => {
             </Upload>
           </Col>
           <Col flex={1} style={{ padding: 8 }}>
-            <Form.Item label="Product Name">
+            <Form.Item name="name" label="Product Name">
               <Input placeholder="Product 1" />
             </Form.Item>
-            <Form.Item label="Price">
+            <Form.Item name="price" label="Price">
               <InputNumber
                 min={0}
                 placeholder="1000"
                 style={{ width: '100%' }}
               />
             </Form.Item>
-            <Form.Item label="Stock Balance">
+            <Form.Item name="stockBalance" label="Stock Balance">
               <InputNumber
                 min={0}
                 placeholder="100"
                 style={{ width: '100%' }}
               />
             </Form.Item>
-            <Form.Item label="Warehouse">
+            <Form.Item name="warehouseId" label="Warehouse">
               <Select
                 placeholder="Select a warehouse"
                 showSearch
@@ -91,7 +142,7 @@ const InputForm = () => {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item label="Description">
+            <Form.Item name="description" label="Description">
               <Input.TextArea
                 autoSize={{
                   minRows: 2,
@@ -104,9 +155,13 @@ const InputForm = () => {
             </Form.Item>
             <Form.Item>
               <Space>
-                <Button type="primary">Save</Button>
+                <Button type="primary" loading={loading} htmlType="submit">
+                  Save
+                </Button>
                 <Link to="/">
-                  <Button type="secondary">Cancel</Button>
+                  <Button type="secondary" disabled={loading}>
+                    Cancel
+                  </Button>
                 </Link>
               </Space>
             </Form.Item>

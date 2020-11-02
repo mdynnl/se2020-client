@@ -21,6 +21,9 @@ function App() {
               <Route path="/add-new" exact>
                 <AddNewItem />
               </Route>
+              <Route path="/edit" exact>
+                <AddNewItem />
+              </Route>
               <Route path="/" exact>
                 <MainPage />
               </Route>

@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from 'react'
 import axios from 'axios'
 import 'antd/dist/antd.css'
-import { Table, Typography, Row } from 'antd'
+import { Table, Typography, Row, Col } from 'antd'
 import './Components.css'
 import ProductInfoCard from './ProductInfoCard'
 import ProductActions from './ProductActions'
@@ -31,7 +31,7 @@ const columns = [
   },
   {
     title: 'Warehouse',
-    dataIndex: 'warehouseId',
+    dataIndex: 'warehouse',
     key: 'warehouse'
   }
 ]
@@ -78,42 +78,48 @@ const items = [
 ]
 
 const ProductTable = () => {
+  const [tableLoading, setTableLoading] = useState(true)
   const [product, setProduct] = useState(items[0])
 
   const [apiProducts, setApiProducts] = useState([])
 
-  // useEffect(() => {
-  //   axios
-  //     .get('/api/v1/products')
-  //     .then(response => {
-  //       setApiProducts(response.data)
-  //     })
-  //     .catch(() => {
-  //       console.log('failed to fetch products')
-  //     })
-  // }, []) // <= just copied your code
+  useEffect(() => {
+    axios
+      .get('/api/v1/products')
+      .then(response => {
+        setTableLoading(false)
+        setApiProducts(response.data)
+      })
+      .catch(() => {
+        console.log('failed to fetch products')
+      })
+  }, []) // <= just copied your code
 
   const onRowClick = record => ({
     onClick: () => {
       setProduct(record)
-      console.log(record)
     }
   })
 
   return (
     <Row>
-      <div className="ProductTable">
-        <Typography.Title level={3}>Product Items</Typography.Title>
-        <ProductActions />
-        <Table
-          columns={columns}
-          dataSource={items}
-          rowKey={item => item.id}
-          scroll={{ x: 240 }}
-          onRow={onRowClick}
-        />
-      </div>
-      <ProductInfoCard product={product} />
+      <Col flex="auto">
+        <div className="ProductTable">
+          <Typography.Title level={3}>Product Items</Typography.Title>
+          <ProductActions />
+          <Table
+            columns={columns}
+            dataSource={apiProducts}
+            rowKey={item => item.id}
+            loading={tableLoading}
+            scroll={{ x: 240 }}
+            onRow={onRowClick}
+          />
+        </div>
+      </Col>
+      <Col>
+        <ProductInfoCard product={product} />
+      </Col>
     </Row>
   )
 }
