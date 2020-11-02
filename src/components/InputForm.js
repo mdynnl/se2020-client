@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import './Components.css'
 import 'antd/dist/antd.css'
-import SuccessModal from './Modals'
 
 import {
   Typography,
@@ -13,22 +12,24 @@ import {
   InputNumber,
   Button,
   Select,
-  Space,
   Upload,
-  Modal
+  Modal,
+  Tooltip
 } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
+import { PlusOutlined, CloseOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 
 // todo: Implement Input Validation
 
 const InputForm = ({ product }) => {
   let initialValues
+
   if (product !== undefined) {
     initialValues = {
       name: product.name
     }
   }
+
   const [warehouses, setWarehouses] = useState([])
 
   useEffect(() => {
@@ -43,7 +44,9 @@ const InputForm = ({ product }) => {
   }, []) // <= don'f forget the dependency array
 
   const [form] = Form.useForm()
+
   const [loading, setLoading] = useState(false)
+
   const onFinish = values => {
     setLoading(true)
     axios
@@ -51,7 +54,7 @@ const InputForm = ({ product }) => {
         name: values.name,
         price: values.price,
         stockBalance: values.stockBalance,
-        warehouseId: 3,
+        warehouseId: values.warehouseId,
         description: values.description,
         picture: 'http://placeimg.com/500/500/business'
       })
@@ -75,6 +78,26 @@ const InputForm = ({ product }) => {
 
   const showErrorModal = ({ message }) => {
     Modal.error({ title: 'Failed', content: 'Failed to add item : ' + message })
+  }
+
+  const formActions = loading => {
+    return (
+      <Row justify="space-between" align="middle">
+        <Button type="primary" loading={loading} htmlType="submit">
+          Save
+        </Button>
+        <Link to="/">
+          <Tooltip title="Close">
+            <Button
+              shape="circle"
+              size="large"
+              icon={<CloseOutlined />}
+              disabled={loading}
+            />
+          </Tooltip>
+        </Link>
+      </Row>
+    )
   }
 
   return (
@@ -148,23 +171,12 @@ const InputForm = ({ product }) => {
                   minRows: 2,
                   maxRows: 4
                 }}
-                maxLength={50}
+                maxLength={100}
                 showCount={true}
                 placeholder="Item Brief Description"
               />
             </Form.Item>
-            <Form.Item>
-              <Space>
-                <Button type="primary" loading={loading} htmlType="submit">
-                  Save
-                </Button>
-                <Link to="/">
-                  <Button type="secondary" disabled={loading}>
-                    Cancel
-                  </Button>
-                </Link>
-              </Space>
-            </Form.Item>
+            <Form.Item>{formActions(loading)}</Form.Item>
           </Col>
         </Row>
       </Form>

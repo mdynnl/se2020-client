@@ -1,85 +1,53 @@
 import { React, useState, useEffect } from 'react'
 import axios from 'axios'
 import 'antd/dist/antd.css'
-import { Table, Typography, Row, Col } from 'antd'
+import {
+  Table,
+  Typography,
+  Row,
+  Col,
+  Button,
+  Space,
+  Divider,
+  Popconfirm,
+  Modal
+} from 'antd'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import './Components.css'
 import ProductInfoCard from './ProductInfoCard'
 import ProductActions from './ProductActions'
+import { Link } from 'react-router-dom'
 
 const columns = [
   {
-    title: 'No',
-    key: 'index',
+    title: 'No.',
     render: (text, record, index) => index + 1
   },
   {
     title: 'Product Name',
-    dataIndex: 'name',
-    key: 'name'
+    dataIndex: 'name'
   },
   {
     title: 'Price',
     dataIndex: 'price',
-    key: 'price',
     align: 'right'
   },
   {
     title: 'Stock Balance',
     dataIndex: 'stockBalance',
-    key: 'stockBalance',
     align: 'right'
   },
   {
     title: 'Warehouse',
     dataIndex: 'warehouseId',
-    key: 'warehouseId'
-  }
-]
-
-const items = [
-  {
-    id: 1,
-    name: 'Product 1',
-    price: 10000,
-    stockBalance: 250,
-    warehouse: 'Warehouse 4',
-    description: 'this item is blah blah',
-    picture:
-      'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-  },
-  {
-    id: 2,
-    name: 'Product 3',
-    price: 35000,
-    stockBalance: 100,
-    warehouse: 'Warehouse 3',
-    description: 'this item is blah blah',
-    picture: 'https://homepages.cae.wisc.edu/~ece533/images/watch.png'
-  },
-  {
-    id: 3,
-    name: 'Product 5',
-    price: 50000,
-    stockBalance: 100,
-    warehouse: 'Warehouse 2',
-    description: 'this item is blah blah',
-    picture:
-      'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-  },
-  {
-    id: 4,
-    name: 'Product 2',
-    price: 100000,
-    stockBalance: 80,
-    warehouse: 'Warehouse 1',
-    description: 'Product of Myanmar',
-    picture: 'https://homepages.cae.wisc.edu/~ece533/images/fruits.png'
+    align: 'right'
   }
 ]
 
 const ProductTable = () => {
   const [tableLoading, setTableLoading] = useState(true)
-  const [product, setProduct] = useState(items[0])
+  const [selectedProduct, setProduct] = useState({})
+  const [modalVisible, setModalVisible] = useState(false)
 
   const [apiProducts, setApiProducts] = useState([])
   const [apiWarehouses, setApiWarehouses] = useState([])
@@ -93,7 +61,9 @@ const ProductTable = () => {
       .then(response => {
         const [{ data: warehouses }, { data: products }] = response
         setApiProducts(products)
+        setProduct(products[0])
         setApiWarehouses(warehouses)
+
         setTableLoading(false)
       })
       .catch(() => {
@@ -104,12 +74,35 @@ const ProductTable = () => {
   const onRowClick = record => ({
     onClick: () => {
       setProduct(record)
+      setModalVisible(true)
+      console.log(record)
     }
   })
 
+  const handleCancel = () => {
+    setModalVisible(false)
+  }
+
+  function confirm(e) {
+    deleteItem()
+  }
+
+  const deleteItem = () => {
+    axios
+      .delete('/api/v1/products/' + selectedProduct.id)
+      .then(response => {
+        setModalVisible(false)
+        console.log(response)
+      })
+      .catch(() => {
+        setModalVisible(false)
+        console.log('failed to delete')
+      })
+  }
+
   // not moving columns here
   // just making a new
-  const newCols = columns.slice(0, columns.length - 2).concat({
+  const newCols = columns.slice(0, columns.length - 1).concat({
     ...columns[columns.length - 1],
     render: id => {
       const warehouse = apiWarehouses.find(w => w.id == id)
@@ -119,7 +112,7 @@ const ProductTable = () => {
 
   return (
     <Row>
-      <Col flex="auto">
+      <Col offset={3} span={18}>
         <div className="ProductTable">
           <Typography.Title level={3}>Product Items</Typography.Title>
           <ProductActions />
@@ -128,14 +121,41 @@ const ProductTable = () => {
             dataSource={apiProducts}
             rowKey={item => item.id}
             loading={tableLoading}
-            scroll={{ x: 240 }}
+            scroll={{ x: true }}
             onRow={onRowClick}
           />
         </div>
       </Col>
-      <Col>
-        <ProductInfoCard product={product} />
-      </Col>
+      <Modal
+        title={selectedProduct.name}
+        onCancel={handleCancel}
+        visible={modalVisible}
+        footer={[
+          <Space split={<Divider type="vertical" />}>
+            <Popconfirm
+              title="Are you sure?"
+              onConfirm={confirm}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="text" danger icon={<DeleteOutlined />}>
+                Delete
+              </Button>
+            </Popconfirm>
+            <Link to="/edit">
+              <Button
+                type="link"
+                icon={<EditOutlined />}
+                onClick={handleCancel}
+              >
+                Edit
+              </Button>
+            </Link>
+          </Space>
+        ]}
+      >
+        <ProductInfoCard product={selectedProduct} />
+      </Modal>
     </Row>
   )
 }

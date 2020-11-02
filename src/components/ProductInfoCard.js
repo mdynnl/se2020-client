@@ -1,7 +1,7 @@
 import { React } from 'react'
 import './Components.css'
 import 'antd/dist/antd.css'
-import { Card, Descriptions, Button, Space } from 'antd'
+import { Descriptions, Space } from 'antd'
 import {
   EditOutlined,
   DollarTwoTone,
@@ -20,33 +20,20 @@ const ProductDesc = ({ product }) => {
   return (
     <>
       <Descriptions column={1} size="middle">
-        <Descriptions.Item>
-          <Space>
-            <DollarTwoTone {...iconStyle} />
-            {product.price}
-          </Space>
+        <Descriptions.Item label="Product Name">
+          {product.name}
         </Descriptions.Item>
-        <Descriptions.Item>
-          <Space>
-            <FundTwoTone {...iconStyle} />
-            {product.stockBalance}
-          </Space>
+        <Descriptions.Item label="Price">{product.price}</Descriptions.Item>
+        <Descriptions.Item label="Stock Balance">
+          {product.stockBalance}
         </Descriptions.Item>
-        <Descriptions.Item>
-          <Space>
-            <HomeTwoTone {...iconStyle} />
-            {product.warehouse}
-          </Space>
+        <Descriptions.Item label="Warehouse">
+          {product.warehouse}
         </Descriptions.Item>
-        <Descriptions.Item>
-          <Space align="baseline">
-            <FileTextTwoTone {...iconStyle} />
-            {product.description}
-          </Space>
+        <Descriptions.Item label="Description">
+          {product.description}
         </Descriptions.Item>
       </Descriptions>
-      {/* <br />
-      <Button icon={<EditOutlined />}>Edit</Button> */}
     </>
   )
 }
@@ -67,21 +54,11 @@ const ProductImagePreview = ({ picture }) => {
 
 const ProductInfoCard = ({ product }) => {
   return (
-    <div style={{ paddingTop: '86px' }}>
-      <Card
-        title={product.name}
-        style={{
-          width: '400px',
-          margin: '24px'
-        }}
-      >
-        <Space size="middle" align="start">
-          <ProductImagePreview picture={product.picture} />
+    <Space size="middle" align="start">
+      <ProductImagePreview picture={product.picture} />
 
-          <Card.Meta description={<ProductDesc product={product} />} />
-        </Space>
-      </Card>
-    </div>
+      <ProductDesc product={product} />
+    </Space>
   )
 }
 
