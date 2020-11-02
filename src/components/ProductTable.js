@@ -31,8 +31,8 @@ const columns = [
   },
   {
     title: 'Warehouse',
-    dataIndex: 'warehouse',
-    key: 'warehouse'
+    dataIndex: 'warehouseId',
+    key: 'warehouseId'
   }
 ]
 
@@ -82,13 +82,19 @@ const ProductTable = () => {
   const [product, setProduct] = useState(items[0])
 
   const [apiProducts, setApiProducts] = useState([])
+  const [apiWarehouses, setApiWarehouses] = useState([])
 
   useEffect(() => {
     axios
-      .get('/api/v1/products')
+      .all([
+        axios.get('/api/foreign/warehouses'),
+        axios.get('/api/v1/products')
+      ])
       .then(response => {
+        const [{ data: warehouses }, { data: products }] = response
+        setApiProducts(products)
+        setApiWarehouses(warehouses)
         setTableLoading(false)
-        setApiProducts(response.data)
       })
       .catch(() => {
         console.log('failed to fetch products')
@@ -101,6 +107,16 @@ const ProductTable = () => {
     }
   })
 
+  // not moving columns here
+  // just making a new
+  const newCols = columns.slice(0, columns.length - 2).concat({
+    ...columns[columns.length - 1],
+    render: id => {
+      const warehouse = apiWarehouses.find(w => w.id == id)
+      return warehouse ? warehouse.name : 'unspecified'
+    }
+  })
+
   return (
     <Row>
       <Col flex="auto">
@@ -108,7 +124,7 @@ const ProductTable = () => {
           <Typography.Title level={3}>Product Items</Typography.Title>
           <ProductActions />
           <Table
-            columns={columns}
+            columns={newCols} // <= changed
             dataSource={apiProducts}
             rowKey={item => item.id}
             loading={tableLoading}
