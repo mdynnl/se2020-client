@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import './Components.css'
 import 'antd/dist/antd.css'
+import { ProductContext } from '../context/ProductContext'
 
 import {
   Typography,
@@ -30,18 +31,8 @@ const InputForm = ({ product }) => {
     }
   }
 
-  const [warehouses, setWarehouses] = useState([])
-
-  useEffect(() => {
-    axios
-      .get('/api/foreign/warehouses')
-      .then(response => {
-        setWarehouses(response.data)
-      })
-      .catch(() => {
-        console.log('failed to fetch warehouses')
-      })
-  }, []) // <= don'f forget the dependency array
+  const { contextWarehouses } = useContext(ProductContext)
+  const [apiWarehouses, setApiWarehouses] = contextWarehouses
 
   const [form] = Form.useForm()
 
@@ -158,7 +149,7 @@ const InputForm = ({ product }) => {
                   option.children.toLowerCase().includes(input.toLowerCase())
                 }
               >
-                {warehouses.map(({ id, name }) => (
+                {apiWarehouses.map(({ id, name }) => (
                   <Select.Option key={id} value={id}>
                     {name}
                   </Select.Option>

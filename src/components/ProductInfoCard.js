@@ -1,7 +1,8 @@
-import { React } from 'react'
+import React, { useContext } from 'react'
 import './Components.css'
 import 'antd/dist/antd.css'
 import { Descriptions, Space } from 'antd'
+import { ProductContext } from '../context/ProductContext'
 
 const ProductDesc = ({ product }) => {
   return (
@@ -39,12 +40,14 @@ const ProductImagePreview = ({ picture }) => {
   )
 }
 
-const ProductInfoCard = ({ product }) => {
+const ProductInfoCard = () => {
+  const { contextSelectedProduct } = useContext(ProductContext)
+  const [selectedProduct, setSelectedProduct] = contextSelectedProduct
   return (
     <Space size="middle" align="start">
-      <ProductImagePreview picture={product.picture} />
+      <ProductImagePreview picture={selectedProduct.picture} />
 
-      <ProductDesc product={product} />
+      <ProductDesc product={selectedProduct} />
     </Space>
   )
 }

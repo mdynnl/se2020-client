@@ -1,20 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Modal, Space, Divider, Popconfirm, Button } from 'antd'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import ProductInfoCard from './ProductInfoCard'
+import { ProductContext } from '../context/ProductContext'
 
-const ProuductInfoModal = ({
-  selectedProduct,
-  visible,
-  handleCancel,
-  confirm
-}) => {
+const ProuductInfoModal = ({ handleCancel, confirm }) => {
+  const { contextSelectedProduct, contextModalVisible } = useContext(
+    ProductContext
+  )
+  const [selectedProduct, setSelectedProduct] = contextSelectedProduct
+  const [modalVisible, setModalVisible] = contextModalVisible
   return (
     <Modal
       title={selectedProduct.name}
       onCancel={handleCancel}
-      visible={visible}
+      visible={modalVisible}
       footer={[
         <Space split={<Divider type="vertical" />}>
           <Popconfirm
@@ -35,7 +36,7 @@ const ProuductInfoModal = ({
         </Space>
       ]}
     >
-      <ProductInfoCard product={selectedProduct} />
+      <ProductInfoCard />
     </Modal>
   )
 }

@@ -1,10 +1,11 @@
-import { React, useState, useEffect } from 'react'
+import { React, useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import 'antd/dist/antd.css'
 import './Components.css'
 import ProductActions from './ProductActions'
 import ProductInfoModal from './ProductInfoModal'
 import { Table, Typography, Row, Col } from 'antd'
+import { ProductContext } from '../context/ProductContext'
 
 const columns = [
   {
@@ -34,11 +35,17 @@ const columns = [
 
 const ProductTable = () => {
   const [tableLoading, setTableLoading] = useState(true)
-  const [selectedProduct, setSelectedProduct] = useState({})
-  const [modalVisible, setModalVisible] = useState(false)
 
-  const [apiProducts, setApiProducts] = useState([])
-  const [apiWarehouses, setApiWarehouses] = useState([])
+  const {
+    contextProducts,
+    contextWarehouses,
+    contextSelectedProduct,
+    contextModalVisible
+  } = useContext(ProductContext)
+  const [apiProducts, setApiProducts] = contextProducts
+  const [apiWarehouses, setApiWarehouses] = contextWarehouses
+  const [selectedProduct, setSelectedProduct] = contextSelectedProduct
+  const [modalVisible, setModalVisible] = contextModalVisible
 
   useEffect(() => {
     axios
@@ -91,7 +98,7 @@ const ProductTable = () => {
   const newCols = columns.slice(0, columns.length - 1).concat({
     ...columns[columns.length - 1],
     render: id => {
-      const warehouse = apiWarehouses.find(w => w.id === id)
+      const warehouse = apiWarehouses.find(w => w.id == id)
       return warehouse ? warehouse.name : 'unspecified'
     }
   })
@@ -112,12 +119,7 @@ const ProductTable = () => {
           />
         </div>
       </Col>
-      <ProductInfoModal
-        selectedProduct={selectedProduct}
-        visible={modalVisible}
-        handleCancel={handleCancel}
-        confirm={confirm}
-      />
+      <ProductInfoModal handleCancel={handleCancel} confirm={confirm} />
     </Row>
   )
 }
