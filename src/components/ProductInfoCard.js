@@ -2,19 +2,6 @@ import { React } from 'react'
 import './Components.css'
 import 'antd/dist/antd.css'
 import { Descriptions, Space } from 'antd'
-import {
-  EditOutlined,
-  DollarTwoTone,
-  FileTextTwoTone,
-  HomeTwoTone,
-  FundTwoTone
-} from '@ant-design/icons'
-
-const iconStyle = {
-  style: {
-    fontSize: 18
-  }
-}
 
 const ProductDesc = ({ product }) => {
   return (

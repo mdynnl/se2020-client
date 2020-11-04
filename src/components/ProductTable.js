@@ -1,22 +1,10 @@
 import { React, useState, useEffect } from 'react'
 import axios from 'axios'
 import 'antd/dist/antd.css'
-import {
-  Table,
-  Typography,
-  Row,
-  Col,
-  Button,
-  Space,
-  Divider,
-  Popconfirm,
-  Modal
-} from 'antd'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import './Components.css'
-import ProductInfoCard from './ProductInfoCard'
 import ProductActions from './ProductActions'
-import { Link } from 'react-router-dom'
+import ProductInfoModal from './ProductInfoModal'
+import { Table, Typography, Row, Col } from 'antd'
 
 const columns = [
   {
@@ -46,7 +34,7 @@ const columns = [
 
 const ProductTable = () => {
   const [tableLoading, setTableLoading] = useState(true)
-  const [selectedProduct, setProduct] = useState({})
+  const [selectedProduct, setSelectedProduct] = useState({})
   const [modalVisible, setModalVisible] = useState(false)
 
   const [apiProducts, setApiProducts] = useState([])
@@ -61,9 +49,7 @@ const ProductTable = () => {
       .then(response => {
         const [{ data: warehouses }, { data: products }] = response
         setApiProducts(products)
-        setProduct(products[0])
         setApiWarehouses(warehouses)
-
         setTableLoading(false)
       })
       .catch(() => {
@@ -73,7 +59,7 @@ const ProductTable = () => {
 
   const onRowClick = record => ({
     onClick: () => {
-      setProduct(record)
+      setSelectedProduct(record)
       setModalVisible(true)
       console.log(record)
     }
@@ -83,7 +69,7 @@ const ProductTable = () => {
     setModalVisible(false)
   }
 
-  function confirm(e) {
+  const confirm = e => {
     deleteItem()
   }
 
@@ -105,7 +91,7 @@ const ProductTable = () => {
   const newCols = columns.slice(0, columns.length - 1).concat({
     ...columns[columns.length - 1],
     render: id => {
-      const warehouse = apiWarehouses.find(w => w.id == id)
+      const warehouse = apiWarehouses.find(w => w.id === id)
       return warehouse ? warehouse.name : 'unspecified'
     }
   })
@@ -126,36 +112,12 @@ const ProductTable = () => {
           />
         </div>
       </Col>
-      <Modal
-        title={selectedProduct.name}
-        onCancel={handleCancel}
+      <ProductInfoModal
+        selectedProduct={selectedProduct}
         visible={modalVisible}
-        footer={[
-          <Space split={<Divider type="vertical" />}>
-            <Popconfirm
-              title="Are you sure?"
-              onConfirm={confirm}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button type="text" danger icon={<DeleteOutlined />}>
-                Delete
-              </Button>
-            </Popconfirm>
-            <Link to="/edit">
-              <Button
-                type="link"
-                icon={<EditOutlined />}
-                onClick={handleCancel}
-              >
-                Edit
-              </Button>
-            </Link>
-          </Space>
-        ]}
-      >
-        <ProductInfoCard product={selectedProduct} />
-      </Modal>
+        handleCancel={handleCancel}
+        confirm={confirm}
+      />
     </Row>
   )
 }
