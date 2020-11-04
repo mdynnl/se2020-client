@@ -4,7 +4,7 @@ import 'antd/dist/antd.css'
 import { Descriptions, Space } from 'antd'
 import { ProductContext } from '../context/ProductContext'
 
-const ProductDesc = ({ product }) => {
+const ProductDesc = ({ product, warehouse }) => {
   return (
     <>
       <Descriptions column={1} size="middle">
@@ -15,9 +15,7 @@ const ProductDesc = ({ product }) => {
         <Descriptions.Item label="Stock Balance">
           {product.stockBalance}
         </Descriptions.Item>
-        <Descriptions.Item label="Warehouse">
-          {product.warehouse}
-        </Descriptions.Item>
+        <Descriptions.Item label="Warehouse">{warehouse}</Descriptions.Item>
         <Descriptions.Item label="Description">
           {product.description}
         </Descriptions.Item>
@@ -41,13 +39,24 @@ const ProductImagePreview = ({ picture }) => {
 }
 
 const ProductInfoCard = () => {
-  const { contextSelectedProduct } = useContext(ProductContext)
+  const { contextWarehouses, contextSelectedProduct } = useContext(
+    ProductContext
+  )
+  const [apiWarehouses, setApiWarehouses] = contextWarehouses
   const [selectedProduct, setSelectedProduct] = contextSelectedProduct
+
+  const findWarehouse = () => {
+    const warehouse = apiWarehouses.find(
+      element => element.id == selectedProduct.warehouseId
+    )
+    return warehouse ? warehouse.name : 'unspecified'
+  }
+
   return (
     <Space size="middle" align="start">
       <ProductImagePreview picture={selectedProduct.picture} />
 
-      <ProductDesc product={selectedProduct} />
+      <ProductDesc product={selectedProduct} warehouse={findWarehouse()} />
     </Space>
   )
 }
