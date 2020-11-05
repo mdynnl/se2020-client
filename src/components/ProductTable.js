@@ -35,6 +35,7 @@ const columns = [
 
 const ProductTable = () => {
   const [tableLoading, setTableLoading] = useState(true)
+  const [modalLoading, setModalLoading] = useState(false)
 
   const {
     contextProducts,
@@ -73,11 +74,18 @@ const ProductTable = () => {
     }
   })
 
-  const handleCancel = () => {
+  const handleEdit = () => {
+    setModalVisible(false)
     setIsEdit(true)
   }
 
+  const handleCancel = () => {
+    setModalVisible(false)
+    setIsEdit(false)
+  }
+
   const confirm = e => {
+    setModalLoading(true)
     deleteItem()
   }
 
@@ -86,10 +94,12 @@ const ProductTable = () => {
       .delete('/api/v1/products/' + selectedProduct.id)
       .then(response => {
         setModalVisible(false)
+        setModalLoading(false)
         console.log(response)
       })
       .catch(() => {
         setModalVisible(false)
+        setModalLoading(false)
         console.log('failed to delete')
       })
   }
@@ -120,7 +130,12 @@ const ProductTable = () => {
           />
         </div>
       </Col>
-      <ProductInfoModal handleCancel={handleCancel} confirm={confirm} />
+      <ProductInfoModal
+        handleCancel={handleCancel}
+        handleEdit={handleEdit}
+        confirm={confirm}
+        modalLoading={modalLoading}
+      />
     </Row>
   )
 }

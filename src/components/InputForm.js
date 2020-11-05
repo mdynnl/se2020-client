@@ -3,7 +3,6 @@ import axios from 'axios'
 import './Components.css'
 import 'antd/dist/antd.css'
 import { ProductContext } from '../context/ProductContext'
-
 import {
   Typography,
   Form,
@@ -17,40 +16,25 @@ import {
   Modal,
   Tooltip
 } from 'antd'
-import { PlusOutlined, CloseOutlined } from '@ant-design/icons'
+import {
+  PlusOutlined,
+  CloseOutlined,
+  ExclamationCircleOutlined
+} from '@ant-design/icons'
 import { Link } from 'react-router-dom'
+import InputFormActions from './InputFormActions'
 
 // todo: Implement Input Validation
 
-const FormActions = loading => {
-  return (
-    <Row justify="space-between" align="middle">
-      <Button type="primary" loading={loading} htmlType="submit">
-        Save
-      </Button>
-      <Link to="/">
-        <Tooltip title="Close">
-          <Button
-            shape="circle"
-            size="large"
-            icon={<CloseOutlined />}
-            disabled={loading}
-          />
-        </Tooltip>
-      </Link>
-    </Row>
-  )
+const showSuccessModal = message => {
+  Modal.success({ title: 'Item Added', content: 'Item added successfully' })
+}
+
+const showErrorModal = ({ message }) => {
+  Modal.error({ title: 'Failed', content: 'Failed to add item : ' + message })
 }
 
 const InputForm = () => {
-  let initialValues
-
-  if (product !== undefined) {
-    initialValues = {
-      name: product.name
-    }
-  }
-
   const {
     contextWarehouses,
     contextSelectedProduct,
@@ -60,54 +44,32 @@ const InputForm = () => {
   const [selectedProduct, setSelectedProduct] = contextSelectedProduct
   const [isEdit, setIsEdit] = contextIsEdit
 
-  useEffect(() => {
-    if (isEdit) {
-      initialValues = {
-        name: selectedProduct.name,
-        price: selectedProduct.price,
-        stockBalance: selectedProduct.stockBalance,
-        waehouseId: selectedProduct.warehouseId,
-        description: selectedProduct.description
-      }
-      console.log(initialValues)
-    }
-  })
-
   const [form] = Form.useForm()
 
-  const [loading, setLoading] = useState(false)
+  const [buttonLoading, setButtonLoading] = useState(false)
 
-  const onFinish = values => {
-    setLoading(true)
+  const confirm = e => {
+    setButtonLoading(true)
     axios
       .post('/api/v1/products', {
-        name: values.name,
-        price: values.price,
-        stockBalance: values.stockBalance,
-        warehouseId: values.warehouseId,
-        description: values.description,
+        name: form.getFieldValue('name'),
+        price: form.getFieldValue('price'),
+        stockBalance: form.getFieldValue('stockBalance'),
+        warehouseId: form.getFieldValue('warehouseId'),
+        description: form.getFieldValue('description'),
         picture: 'http://placeimg.com/500/500/business'
       })
       .then(response => {
-        setLoading(false)
+        setButtonLoading(false)
         form.resetFields()
         showSuccessModal('Item Added')
         console.log(response)
       })
       .catch(error => {
-        setLoading(false)
+        setButtonLoading(false)
         showErrorModal(error)
         console.log(error)
       })
-    // console.log(values)
-  }
-
-  const showSuccessModal = message => {
-    Modal.success({ title: 'Item Added', content: 'Item added successfully' })
-  }
-
-  const showErrorModal = ({ message }) => {
-    Modal.error({ title: 'Failed', content: 'Failed to add item : ' + message })
   }
 
   return (
@@ -118,13 +80,7 @@ const InputForm = () => {
       >
         Add A New Product Item
       </Typography.Title>
-      <Form
-        form={form}
-        name="product"
-        layout="vertical"
-        onFinish={onFinish}
-        initialValues={initialValues}
-      >
+      <Form form={form} name="product" layout="vertical">
         <Row>
           <Col>
             <Upload
@@ -187,7 +143,10 @@ const InputForm = () => {
               />
             </Form.Item>
             <Form.Item>
-              <FormActions loading={loading} />
+              <InputFormActions
+                buttonLoading={buttonLoading}
+                confirm={confirm}
+              />
             </Form.Item>
           </Col>
         </Row>

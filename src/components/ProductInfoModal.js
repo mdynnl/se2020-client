@@ -5,7 +5,12 @@ import { Link } from 'react-router-dom'
 import ProductInfoCard from './ProductInfoCard'
 import { ProductContext } from '../context/ProductContext'
 
-const ProuductInfoModal = ({ handleCancel, confirm }) => {
+const ProuductInfoModal = ({
+  handleCancel,
+  handleEdit,
+  confirm,
+  modalLoading
+}) => {
   const { contextSelectedProduct, contextModalVisible } = useContext(
     ProductContext
   )
@@ -24,12 +29,22 @@ const ProuductInfoModal = ({ handleCancel, confirm }) => {
             okText="Yes"
             cancelText="No"
           >
-            <Button type="text" danger icon={<DeleteOutlined />}>
+            <Button
+              type="text"
+              danger
+              icon={<DeleteOutlined />}
+              loading={modalLoading}
+            >
               Delete
             </Button>
           </Popconfirm>
           <Link to="/edit">
-            <Button type="link" icon={<EditOutlined />} onClick={handleCancel}>
+            <Button
+              type="link"
+              icon={<EditOutlined />}
+              onClick={handleEdit}
+              disabled={modalLoading}
+            >
               Edit
             </Button>
           </Link>
