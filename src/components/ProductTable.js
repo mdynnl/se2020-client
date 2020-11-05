@@ -41,14 +41,12 @@ const ProductTable = () => {
     contextProducts,
     contextWarehouses,
     contextSelectedProduct,
-    contextModalVisible,
-    contextIsEdit
+    contextModalVisible
   } = useContext(ProductContext)
   const [apiProducts, setApiProducts] = contextProducts
   const [apiWarehouses, setApiWarehouses] = contextWarehouses
   const [selectedProduct, setSelectedProduct] = contextSelectedProduct
   const [modalVisible, setModalVisible] = contextModalVisible
-  const [isEdit, setIsEdit] = contextIsEdit
 
   useEffect(() => {
     axios
@@ -76,16 +74,17 @@ const ProductTable = () => {
 
   const handleEdit = () => {
     setModalVisible(false)
-    setIsEdit(true)
   }
 
   const handleCancel = () => {
     setModalVisible(false)
-    setIsEdit(false)
+
+    setSelectedProduct({})
   }
 
   const confirm = e => {
     setModalLoading(true)
+
     deleteItem()
   }
 

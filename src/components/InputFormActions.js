@@ -7,7 +7,7 @@ const InputFormActions = ({ buttonLoading, confirm }) => {
   return (
     <Row justify="space-between" align="middle">
       <Popconfirm
-        title="Are you sure"
+        title="Are you sure?"
         onConfirm={confirm}
         okText="OK"
         cancelText="Cancel"

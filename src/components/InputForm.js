@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import axios from 'axios'
 import './Components.css'
 import 'antd/dist/antd.css'
@@ -10,19 +10,13 @@ import {
   Col,
   Input,
   InputNumber,
-  Button,
   Select,
   Upload,
-  Modal,
-  Tooltip
+  Modal
 } from 'antd'
-import {
-  PlusOutlined,
-  CloseOutlined,
-  ExclamationCircleOutlined
-} from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { PlusOutlined } from '@ant-design/icons'
 import InputFormActions from './InputFormActions'
+import { useLocation } from 'react-router-dom'
 
 // todo: Implement Input Validation
 
@@ -35,18 +29,25 @@ const showErrorModal = ({ message }) => {
 }
 
 const InputForm = () => {
-  const {
-    contextWarehouses,
-    contextSelectedProduct,
-    contextIsEdit
-  } = useContext(ProductContext)
+  const { contextWarehouses, contextSelectedProduct } = useContext(
+    ProductContext
+  )
   const [apiWarehouses, setApiWarehouses] = contextWarehouses
   const [selectedProduct, setSelectedProduct] = contextSelectedProduct
-  const [isEdit, setIsEdit] = contextIsEdit
-
+  const [buttonLoading, setButtonLoading] = useState(false)
   const [form] = Form.useForm()
 
-  const [buttonLoading, setButtonLoading] = useState(false)
+  const location = useLocation()
+
+  if (location.pathname === '/edit') {
+    form.setFieldsValue({
+      name: selectedProduct.name,
+      price: selectedProduct.price,
+      stockBalance: selectedProduct.stockBalance,
+      warehouseId: selectedProduct.warehouseId,
+      description: selectedProduct.description
+    })
+  }
 
   const confirm = e => {
     setButtonLoading(true)
