@@ -22,7 +22,27 @@ import { Link } from 'react-router-dom'
 
 // todo: Implement Input Validation
 
-const InputForm = ({ product }) => {
+const FormActions = loading => {
+  return (
+    <Row justify="space-between" align="middle">
+      <Button type="primary" loading={loading} htmlType="submit">
+        Save
+      </Button>
+      <Link to="/">
+        <Tooltip title="Close">
+          <Button
+            shape="circle"
+            size="large"
+            icon={<CloseOutlined />}
+            disabled={loading}
+          />
+        </Tooltip>
+      </Link>
+    </Row>
+  )
+}
+
+const InputForm = () => {
   let initialValues
 
   if (product !== undefined) {
@@ -31,8 +51,27 @@ const InputForm = ({ product }) => {
     }
   }
 
-  const { contextWarehouses } = useContext(ProductContext)
+  const {
+    contextWarehouses,
+    contextSelectedProduct,
+    contextIsEdit
+  } = useContext(ProductContext)
   const [apiWarehouses, setApiWarehouses] = contextWarehouses
+  const [selectedProduct, setSelectedProduct] = contextSelectedProduct
+  const [isEdit, setIsEdit] = contextIsEdit
+
+  useEffect(() => {
+    if (isEdit) {
+      initialValues = {
+        name: selectedProduct.name,
+        price: selectedProduct.price,
+        stockBalance: selectedProduct.stockBalance,
+        waehouseId: selectedProduct.warehouseId,
+        description: selectedProduct.description
+      }
+      console.log(initialValues)
+    }
+  })
 
   const [form] = Form.useForm()
 
@@ -69,26 +108,6 @@ const InputForm = ({ product }) => {
 
   const showErrorModal = ({ message }) => {
     Modal.error({ title: 'Failed', content: 'Failed to add item : ' + message })
-  }
-
-  const formActions = loading => {
-    return (
-      <Row justify="space-between" align="middle">
-        <Button type="primary" loading={loading} htmlType="submit">
-          Save
-        </Button>
-        <Link to="/">
-          <Tooltip title="Close">
-            <Button
-              shape="circle"
-              size="large"
-              icon={<CloseOutlined />}
-              disabled={loading}
-            />
-          </Tooltip>
-        </Link>
-      </Row>
-    )
   }
 
   return (
@@ -167,7 +186,9 @@ const InputForm = ({ product }) => {
                 placeholder="Item Brief Description"
               />
             </Form.Item>
-            <Form.Item>{formActions(loading)}</Form.Item>
+            <Form.Item>
+              <FormActions loading={loading} />
+            </Form.Item>
           </Col>
         </Row>
       </Form>

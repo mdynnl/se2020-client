@@ -7,6 +7,7 @@ export const ProductProvider = props => {
 
   const [selectedProduct, setSelectedProduct] = useState({})
   const [modalVisible, setModalVisible] = useState(false)
+  const [isEdit, setIsEdit] = useState(false)
 
   return (
     <ProductContext.Provider
@@ -14,7 +15,8 @@ export const ProductProvider = props => {
         contextProducts: [apiProducts, setApiProducts],
         contextWarehouses: [apiWarehouses, setApiWarehouses],
         contextSelectedProduct: [selectedProduct, setSelectedProduct],
-        contextModalVisible: [modalVisible, setModalVisible]
+        contextModalVisible: [modalVisible, setModalVisible],
+        contextIsEdit: [isEdit, setIsEdit]
       }}
     >
       {props.children}

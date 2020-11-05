@@ -40,12 +40,14 @@ const ProductTable = () => {
     contextProducts,
     contextWarehouses,
     contextSelectedProduct,
-    contextModalVisible
+    contextModalVisible,
+    contextIsEdit
   } = useContext(ProductContext)
   const [apiProducts, setApiProducts] = contextProducts
   const [apiWarehouses, setApiWarehouses] = contextWarehouses
   const [selectedProduct, setSelectedProduct] = contextSelectedProduct
   const [modalVisible, setModalVisible] = contextModalVisible
+  const [isEdit, setIsEdit] = contextIsEdit
 
   useEffect(() => {
     axios
@@ -68,12 +70,11 @@ const ProductTable = () => {
     onClick: () => {
       setSelectedProduct(record)
       setModalVisible(true)
-      console.log(record)
     }
   })
 
   const handleCancel = () => {
-    setModalVisible(false)
+    setIsEdit(true)
   }
 
   const confirm = e => {
