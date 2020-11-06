@@ -112,6 +112,8 @@ const InputForm = () => {
         form={form}
         name="product"
         layout="vertical"
+        requiredMark={false}
+        onFinish={showConfirmationModal}
         initialValues={initialValues}
       >
         <Row>
@@ -132,24 +134,40 @@ const InputForm = () => {
             </Upload>
           </Col>
           <Col flex={1} style={{ padding: 8 }}>
-            <Form.Item name="name" label="Product Name">
+            <Form.Item
+              name="name"
+              label="Product Name"
+              rules={[{ required: true, message: 'Product Name is required' }]}
+            >
               <Input placeholder="Product 1" />
             </Form.Item>
-            <Form.Item name="price" label="Price">
+            <Form.Item
+              name="price"
+              label="Price"
+              rules={[{ required: true, message: 'Price is required' }]}
+            >
               <InputNumber
                 min={0}
                 placeholder="1000"
                 style={{ width: '100%' }}
               />
             </Form.Item>
-            <Form.Item name="stockBalance" label="Stock Balance">
+            <Form.Item
+              name="stockBalance"
+              label="Stock Balance"
+              rules={[{ required: true, message: 'Stock Balance is required' }]}
+            >
               <InputNumber
                 min={0}
                 placeholder="100"
                 style={{ width: '100%' }}
               />
             </Form.Item>
-            <Form.Item name="warehouseId" label="Warehouse">
+            <Form.Item
+              name="warehouseId"
+              label="Warehouse"
+              rules={[{ required: true, message: 'Warehouse is required' }]}
+            >
               <Select
                 placeholder="Select a warehouse"
                 showSearch
@@ -164,7 +182,13 @@ const InputForm = () => {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item name="description" label="Description">
+            <Form.Item
+              name="description"
+              label="Description"
+              rules={[
+                { required: true, message: 'Product Description is required' }
+              ]}
+            >
               <Input.TextArea
                 autoSize={{
                   minRows: 2,
@@ -176,10 +200,7 @@ const InputForm = () => {
               />
             </Form.Item>
             <Form.Item>
-              <InputFormActions
-                buttonLoading={buttonLoading}
-                confirm={showConfirmationModal}
-              />
+              <InputFormActions buttonLoading={buttonLoading} />
             </Form.Item>
           </Col>
         </Row>

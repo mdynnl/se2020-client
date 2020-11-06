@@ -3,15 +3,10 @@ import { Row, Button, Tooltip } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 
-const InputFormActions = ({ buttonLoading, confirm }) => {
+const InputFormActions = ({ buttonLoading }) => {
   return (
     <Row justify="space-between" align="middle">
-      <Button
-        type="primary"
-        loading={buttonLoading}
-        htmlType="submit"
-        onClick={confirm}
-      >
+      <Button type="primary" loading={buttonLoading} htmlType="submit">
         Save
       </Button>
 
