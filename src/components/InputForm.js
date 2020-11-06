@@ -20,12 +20,20 @@ import { useLocation } from 'react-router-dom'
 
 // todo: Implement Input Validation
 
-const showSuccessModal = message => {
-  Modal.success({ title: 'Item Added', content: 'Item added successfully' })
+const showSuccessModal = () => {
+  Modal.success({
+    centered: true,
+    title: 'Product Saved',
+    content: 'Product Saved successfully'
+  })
 }
 
 const showErrorModal = ({ message }) => {
-  Modal.error({ title: 'Failed', content: 'Failed to add item : ' + message })
+  Modal.error({
+    centered: true,
+    title: 'Failed',
+    content: 'Failed to add product : ' + message
+  })
 }
 
 const InputForm = () => {
@@ -39,20 +47,28 @@ const InputForm = () => {
 
   const location = useLocation()
 
+  let title = 'Add A New Product Item'
+  let apiPath = '/api/v1/products'
+  let message = 'Item Added'
+  let initialValues = {}
+
   if (location.pathname === '/edit') {
-    form.setFieldsValue({
+    initialValues = {
       name: selectedProduct.name,
       price: selectedProduct.price,
       stockBalance: selectedProduct.stockBalance,
       warehouseId: selectedProduct.warehouseId,
       description: selectedProduct.description
-    })
+    }
+    title = 'Edit Product'
+    apiPath = '/api/v1/products/' + selectedProduct.id
+    message = 'Item Updated'
   }
 
   const confirm = e => {
     setButtonLoading(true)
     axios
-      .post('/api/v1/products', {
+      .post(apiPath, {
         name: form.getFieldValue('name'),
         price: form.getFieldValue('price'),
         stockBalance: form.getFieldValue('stockBalance'),
@@ -63,7 +79,7 @@ const InputForm = () => {
       .then(response => {
         setButtonLoading(false)
         form.resetFields()
-        showSuccessModal('Item Added')
+        showSuccessModal(message)
         console.log(response)
       })
       .catch(error => {
@@ -73,15 +89,31 @@ const InputForm = () => {
       })
   }
 
+  const showConfirmationModal = () => {
+    Modal.confirm({
+      title: 'Are you sure to save this product?',
+      centered: true,
+      onOk() {
+        confirm()
+      },
+      onCancel() {}
+    })
+  }
+
   return (
     <div className="InputForm">
       <Typography.Title
         level={3}
         style={{ alignSelf: 'center', color: '#343434' }}
       >
-        Add A New Product Item
+        {title}
       </Typography.Title>
-      <Form form={form} name="product" layout="vertical">
+      <Form
+        form={form}
+        name="product"
+        layout="vertical"
+        initialValues={initialValues}
+      >
         <Row>
           <Col>
             <Upload
@@ -146,7 +178,7 @@ const InputForm = () => {
             <Form.Item>
               <InputFormActions
                 buttonLoading={buttonLoading}
-                confirm={confirm}
+                confirm={showConfirmationModal}
               />
             </Form.Item>
           </Col>
