@@ -16,6 +16,7 @@ import {
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import InputFormActions from './InputFormActions'
+import ImageUpload from './ImageUpload'
 import { useLocation } from 'react-router-dom'
 
 // todo: Implement Input Validation
@@ -122,22 +123,8 @@ const InputForm = () => {
         initialValues={initialValues}
       >
         <Row>
-          <Col>
-            <Upload
-              name="picture"
-              listType="picture-card"
-              showUploadList={false}
-              beforeUpload={f => setFileList([...fileList, f])}
-              style={{
-                width: '200px',
-                height: '200px'
-              }}
-            >
-              <div>
-                <PlusOutlined />
-                <div style={{ marginTop: 8 }}>Upload</div>
-              </div>
-            </Upload>
+          <Col style={{ padding: 8 }}>
+            <ImageUpload />
           </Col>
           <Col flex={1} style={{ padding: 8 }}>
             <Form.Item

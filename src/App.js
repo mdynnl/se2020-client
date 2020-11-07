@@ -2,6 +2,7 @@ import './App.css'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import AddNewItem from './pages/AddNewItem'
 import MainPage from './pages/MainPage'
+import CompanyAvatar from './components/CompanyAvatar'
 import { Layout } from 'antd'
 import { ProductProvider } from './context/ProductContext'
 
@@ -12,7 +13,7 @@ function App() {
         <div className="App">
           <Layout>
             <Layout.Header style={{ color: 'white' }}>
-              Product Item Module
+              <CompanyAvatar />
             </Layout.Header>
             <Layout.Content>
               <Switch>
