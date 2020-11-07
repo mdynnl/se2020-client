@@ -14,7 +14,7 @@ const ProductActions = () => (
         marginBottom: 16
       }}
     >
-      <Link to="/add-new">
+      <Link to="/new">
         <Button type="primary" icon={<PlusOutlined />}>
           Add New
         </Button>

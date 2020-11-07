@@ -6,6 +6,7 @@ import ProductActions from './ProductActions'
 import ProductInfoModal from './ProductInfoModal'
 import { Table, Typography, Row, Col } from 'antd'
 import { ProductContext } from '../context/ProductContext'
+import { useHistory } from 'react-router-dom'
 
 const columns = [
   {
@@ -28,7 +29,7 @@ const columns = [
   },
   {
     title: 'Warehouse',
-    dataIndex: 'warehouseId',
+    dataIndex: ['warehouse', 'name'],
     align: 'right'
   }
 ]
@@ -36,6 +37,7 @@ const columns = [
 const ProductTable = () => {
   const [tableLoading, setTableLoading] = useState(true)
   const [modalLoading, setModalLoading] = useState(false)
+  const history = useHistory()
 
   const {
     contextProducts,
@@ -63,7 +65,7 @@ const ProductTable = () => {
       .catch(() => {
         console.log('failed to fetch products')
       })
-  }, []) // <= just copied your code
+  }, [])
 
   const onRowClick = record => ({
     onClick: () => {
@@ -78,7 +80,6 @@ const ProductTable = () => {
 
   const handleCancel = () => {
     setModalVisible(false)
-
     setSelectedProduct({})
   }
 
@@ -95,6 +96,7 @@ const ProductTable = () => {
         setModalVisible(false)
         setModalLoading(false)
         console.log(response)
+        history.push()
       })
       .catch(() => {
         setModalVisible(false)
@@ -103,16 +105,6 @@ const ProductTable = () => {
       })
   }
 
-  // not moving columns here
-  // just making a new
-  const newCols = columns.slice(0, columns.length - 1).concat({
-    ...columns[columns.length - 1],
-    render: id => {
-      const warehouse = apiWarehouses.find(w => w.id == id)
-      return warehouse ? warehouse.name : 'unspecified'
-    }
-  })
-
   return (
     <Row>
       <Col offset={3} span={18}>
@@ -120,7 +112,7 @@ const ProductTable = () => {
           <Typography.Title level={3}>Product Items</Typography.Title>
           <ProductActions />
           <Table
-            columns={newCols} // <= changed
+            columns={columns}
             dataSource={apiProducts}
             rowKey={item => item.id}
             loading={tableLoading}

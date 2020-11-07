@@ -44,6 +44,7 @@ const InputForm = () => {
   const [selectedProduct, setSelectedProduct] = contextSelectedProduct
   const [buttonLoading, setButtonLoading] = useState(false)
   const [form] = Form.useForm()
+  const [fileList, setFileList] = useState([])
 
   const location = useLocation()
 
@@ -67,15 +68,19 @@ const InputForm = () => {
 
   const confirm = e => {
     setButtonLoading(true)
+    const fields = {
+      name: form.getFieldValue('name'),
+      price: form.getFieldValue('price'),
+      stockBalance: form.getFieldValue('stockBalance'),
+      warehouseId: form.getFieldValue('warehouseId'),
+      description: form.getFieldValue('description')
+    }
+    const formData = new FormData()
+    for (let k in fields) formData.append(k, fields[k])
+    fileList.length && formData.append('picture', ...fileList)
+    console.log(formData)
     axios
-      .post(apiPath, {
-        name: form.getFieldValue('name'),
-        price: form.getFieldValue('price'),
-        stockBalance: form.getFieldValue('stockBalance'),
-        warehouseId: form.getFieldValue('warehouseId'),
-        description: form.getFieldValue('description'),
-        picture: 'http://placeimg.com/500/500/business'
-      })
+      .post(apiPath, formData)
       .then(response => {
         setButtonLoading(false)
         form.resetFields()
@@ -122,6 +127,7 @@ const InputForm = () => {
               name="picture"
               listType="picture-card"
               showUploadList={false}
+              beforeUpload={f => setFileList([...fileList, f])}
               style={{
                 width: '200px',
                 height: '200px'

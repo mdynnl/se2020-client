@@ -11,16 +11,12 @@ function App() {
       <ProductProvider>
         <div className="App">
           <Layout>
-            <Layout.Header
-              style={{
-                color: 'white'
-              }}
-            >
+            <Layout.Header style={{ color: 'white' }}>
               Product Item Module
             </Layout.Header>
             <Layout.Content>
               <Switch>
-                <Route path="/add-new" exact>
+                <Route path="/new" exact>
                   <AddNewItem />
                 </Route>
                 <Route path="/edit" exact>
