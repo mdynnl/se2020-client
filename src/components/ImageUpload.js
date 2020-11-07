@@ -2,6 +2,13 @@ import React, { useState } from 'react'
 import { Upload } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 
+const UploadButton = () => (
+  <div>
+    <PlusOutlined />
+    <div style={{ marginTop: 8 }}>Photo</div>
+  </div>
+)
+
 const ImageUpload = () => {
   const [fileList, setFileList] = useState([])
 
@@ -16,10 +23,7 @@ const ImageUpload = () => {
         height: '200px'
       }}
     >
-      <div>
-        <PlusOutlined />
-        <div style={{ marginTop: 8 }}>Photo</div>
-      </div>
+      {fileList.length >= 1 ? null : <UploadButton />}
     </Upload>
   )
 }

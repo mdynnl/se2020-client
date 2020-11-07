@@ -4,6 +4,7 @@ export const ProductContext = createContext()
 export const ProductProvider = props => {
   const [apiProducts, setApiProducts] = useState([])
   const [apiWarehouses, setApiWarehouses] = useState([])
+  const [trashProducts, setTrashProducts] = useState([])
 
   const [selectedProduct, setSelectedProduct] = useState({})
   const [modalVisible, setModalVisible] = useState(false)
@@ -13,6 +14,7 @@ export const ProductProvider = props => {
       value={{
         contextProducts: [apiProducts, setApiProducts],
         contextWarehouses: [apiWarehouses, setApiWarehouses],
+        contextTrashProducts: [trashProducts, setTrashProducts],
         contextSelectedProduct: [selectedProduct, setSelectedProduct],
         contextModalVisible: [modalVisible, setModalVisible]
       }}

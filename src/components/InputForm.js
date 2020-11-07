@@ -11,10 +11,8 @@ import {
   Input,
   InputNumber,
   Select,
-  Upload,
   Modal
 } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
 import InputFormActions from './InputFormActions'
 import ImageUpload from './ImageUpload'
 import { useLocation } from 'react-router-dom'
@@ -187,7 +185,7 @@ const InputForm = () => {
                   minRows: 2,
                   maxRows: 4
                 }}
-                maxLength={100}
+                maxLength={150}
                 showCount={true}
                 placeholder="Item Brief Description"
               />
