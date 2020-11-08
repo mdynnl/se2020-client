@@ -38,7 +38,7 @@ const ProuductInfoModal = ({
               Delete
             </Button>
           </Popconfirm>
-          <Link to="/edit">
+          <Link to={`/products/${selectedProduct.id}/edit`}>
             <Button
               type="link"
               icon={<EditOutlined />}

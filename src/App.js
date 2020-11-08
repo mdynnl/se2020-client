@@ -38,7 +38,7 @@ function App() {
                 </Route>
 
                 <Route path="/products/:id/edit" exact>
-                  product edit
+                  <AddNewItem />
                 </Route>
 
                 <Route path="/products/:id" exact>

@@ -9,15 +9,14 @@ const UploadButton = () => (
   </div>
 )
 
-const ImageUpload = () => {
-  const [fileList, setFileList] = useState([])
-
+const ImageUpload = ({ fileList, setFileList, handleUpload }) => {
   return (
     <Upload
       name="picture"
       listType="picture-card"
-      showUploadList={false}
-      beforeUpload={f => setFileList([...fileList, f])}
+      handleUpload={handleUpload}
+      onChange={fileList => setFileList(fileList)}
+      beforeUpload={f => setFileList(f)}
       style={{
         width: '200px',
         height: '200px'

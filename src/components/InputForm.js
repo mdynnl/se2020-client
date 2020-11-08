@@ -11,7 +11,8 @@ import {
   Input,
   InputNumber,
   Select,
-  Modal
+  Modal,
+  Card
 } from 'antd'
 import InputFormActions from './InputFormActions'
 import ImageUpload from './ImageUpload'
@@ -52,13 +53,14 @@ const InputForm = () => {
   let message = 'Item Added'
   let initialValues = {}
 
-  if (location.pathname === '/edit') {
+  if (location.pathname !== '/products/new') {
     initialValues = {
       name: selectedProduct.name,
       price: selectedProduct.price,
       stockBalance: selectedProduct.stockBalance,
       warehouseId: selectedProduct.warehouseId,
-      description: selectedProduct.description
+      description: selectedProduct.description,
+      picture: selectedProduct.picture
     }
     title = 'Edit Product'
     apiPath = '/api/v1/products/' + selectedProduct.id
@@ -106,96 +108,106 @@ const InputForm = () => {
 
   return (
     <div className="InputForm">
-      <Typography.Title
-        level={3}
-        style={{ alignSelf: 'center', color: '#343434' }}
-      >
-        {title}
-      </Typography.Title>
-      <Form
-        form={form}
-        name="product"
-        layout="vertical"
-        requiredMark={false}
-        onFinish={showConfirmationModal}
-        initialValues={initialValues}
-      >
-        <Row>
-          <Col style={{ padding: 8 }}>
-            <ImageUpload />
-          </Col>
-          <Col flex={1} style={{ padding: 8 }}>
-            <Form.Item
-              name="name"
-              label="Product Name"
-              rules={[{ required: true, message: 'Product Name is required' }]}
-            >
-              <Input placeholder="Product 1" />
-            </Form.Item>
-            <Form.Item
-              name="price"
-              label="Price"
-              rules={[{ required: true, message: 'Price is required' }]}
-            >
-              <InputNumber
-                min={0}
-                placeholder="1000"
-                style={{ width: '100%' }}
+      <Card>
+        <Typography.Title
+          level={3}
+          style={{ alignSelf: 'center', color: '#343434' }}
+        >
+          {title}
+        </Typography.Title>
+        <Form
+          form={form}
+          name="product"
+          layout="vertical"
+          requiredMark={false}
+          onFinish={showConfirmationModal}
+          initialValues={initialValues}
+        >
+          <Row>
+            <Col style={{ padding: 8 }}>
+              <ImageUpload
+                fileList={fileList}
+                setFileList={setFileList}
+                handleUpload={confirm}
               />
-            </Form.Item>
-            <Form.Item
-              name="stockBalance"
-              label="Stock Balance"
-              rules={[{ required: true, message: 'Stock Balance is required' }]}
-            >
-              <InputNumber
-                min={0}
-                placeholder="100"
-                style={{ width: '100%' }}
-              />
-            </Form.Item>
-            <Form.Item
-              name="warehouseId"
-              label="Warehouse"
-              rules={[{ required: true, message: 'Warehouse is required' }]}
-            >
-              <Select
-                placeholder="Select a warehouse"
-                showSearch
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().includes(input.toLowerCase())
-                }
+            </Col>
+            <Col flex={1} style={{ padding: 8 }}>
+              <Form.Item
+                name="name"
+                label="Product Name"
+                rules={[
+                  { required: true, message: 'Product Name is required' }
+                ]}
               >
-                {apiWarehouses.map(({ id, name }) => (
-                  <Select.Option key={id} value={id}>
-                    {name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item
-              name="description"
-              label="Description"
-              rules={[
-                { required: true, message: 'Product Description is required' }
-              ]}
-            >
-              <Input.TextArea
-                autoSize={{
-                  minRows: 2,
-                  maxRows: 4
-                }}
-                maxLength={150}
-                showCount={true}
-                placeholder="Item Brief Description"
-              />
-            </Form.Item>
-            <Form.Item>
-              <InputFormActions buttonLoading={buttonLoading} />
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
+                <Input placeholder="Product 1" />
+              </Form.Item>
+              <Form.Item
+                name="price"
+                label="Price"
+                rules={[{ required: true, message: 'Price is required' }]}
+              >
+                <InputNumber
+                  min={0}
+                  placeholder="1000"
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+              <Form.Item
+                name="stockBalance"
+                label="Stock Balance"
+                rules={[
+                  { required: true, message: 'Stock Balance is required' }
+                ]}
+              >
+                <InputNumber
+                  min={0}
+                  placeholder="100"
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+              <Form.Item
+                name="warehouseId"
+                label="Warehouse"
+                rules={[{ required: true, message: 'Warehouse is required' }]}
+              >
+                <Select
+                  placeholder="Select a warehouse"
+                  showSearch
+                  filterOption={(input, option) =>
+                    option.children.toLowerCase().includes(input.toLowerCase())
+                  }
+                >
+                  {apiWarehouses.map(({ id, name }) => (
+                    <Select.Option key={id} value={id}>
+                      {name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                name="description"
+                label="Description"
+                rules={[
+                  { required: true, message: 'Product Description is required' }
+                ]}
+              >
+                <Input.TextArea
+                  autoSize={{
+                    minRows: 2,
+                    maxRows: 4
+                  }}
+                  maxLength={150}
+                  showCount={true}
+                  placeholder="Item Brief Description"
+                />
+              </Form.Item>
+              <Form.Item>
+                <InputFormActions buttonLoading={buttonLoading} />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Card>
     </div>
   )
 }
