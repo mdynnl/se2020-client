@@ -1,5 +1,10 @@
 import './App.css'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from 'react-router-dom'
 import AddNewItem from './pages/AddNewItem'
 import MainPage from './pages/MainPage'
 import CompanyAvatar from './components/CompanyAvatar'
@@ -17,14 +22,31 @@ function App() {
             </Layout.Header>
             <Layout.Content>
               <Switch>
-                <Route path="/new" exact>
-                  <AddNewItem />
-                </Route>
-                <Route path="/edit" exact>
-                  <AddNewItem />
-                </Route>
                 <Route path="/" exact>
+                  <Redirect to="/products" />
+                </Route>
+                <Route path="/products" exact>
                   <MainPage />
+                </Route>
+
+                <Route path="/products/trash" exact>
+                  recycle bin
+                </Route>
+
+                <Route path="/products/new" exact>
+                  <AddNewItem />
+                </Route>
+
+                <Route path="/products/:id/edit" exact>
+                  product edit
+                </Route>
+
+                <Route path="/products/:id" exact>
+                  product info
+                </Route>
+
+                <Route path="*" exact>
+                  404 not found
                 </Route>
               </Switch>
             </Layout.Content>

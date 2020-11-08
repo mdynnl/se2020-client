@@ -40,7 +40,7 @@ const ProductActions = ({ rowsCount }) => {
             marginBottom: 16
           }}
         >
-          <Link to="/new">
+          <Link to="/products/new">
             <Button type="primary" icon={<PlusOutlined />}>
               Add New
             </Button>
